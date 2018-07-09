@@ -19,6 +19,7 @@
     [super initialize];
     self.stage = 1;
     self.startStep = self.step = 1;
+    self.resetTimes = 1;
 }
 
 - (RACCommand *)selectCommand{
@@ -65,25 +66,34 @@
         targetLie >= 0 && targetLie < kNoGreenLenght) {
         [pixelsNeedChangeType addObject:self.pixels[targetHang][targetLie]];
     }
-    
-    for (LYUPixel * pixel in pixelsNeedChangeType) {
-        if (pixel.type == kLYUPixelTypeNormal) {
-            pixel.type = kLYUPixelTypeSelected;
-        }else{
-            pixel.type = kLYUPixelTypeNormal;
+    if (self.step >= 0) {
+        for (LYUPixel * pixel in pixelsNeedChangeType) {
+            if (pixel.type == kLYUPixelTypeNormal) {
+                pixel.type = kLYUPixelTypeSelected;
+            }else{
+                pixel.type = kLYUPixelTypeNormal;
+            }
         }
+    }else{
+        self.step = 0;
     }
+    
     if ([self detectFail]) {
-        UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"失败" message:@"步数用尽,请重新开始此关卡!" preferredStyle:UIAlertControllerStyleAlert];
-        [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            self.step = self.startStep;
-            self.gameMap = self.gameMap;
-        }]];
-        [self.viewController presentViewController:alertController animated:YES completion:nil];
-    }
-    if ([self detectWin]) {
-//        self.startStep =  self.step = self.step + ++self.stage;//保留上一关剩余的步数(easy 模式)
+        if ([self canResetCurrentStage]) {
+            UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"失败" message:[NSString stringWithFormat:@"步数用尽,请重新开始此关卡!(%zd/3)",self.resetTimes] preferredStyle:UIAlertControllerStyleAlert];
+            [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                ++self.resetTimes;
+                self.step = self.startStep;
+                self.gameMap = self.gameMap;
+            }]];
+            [self.viewController presentViewController:alertController animated:YES completion:nil];
+        }else{
+            [UIUtil showHint:@"三次重置机会已经用尽,重新开始游戏吧!"];
+        }
+    }else if ([self detectWin]) {
+        //        self.startStep =  self.step = self.step + ++self.stage;//保留上一关剩余的步数(easy 模式)
         self.startStep =  self.step = ++self.stage;//不保留上一关剩余的步数(hard 模式)
+        self.resetTimes = 1;
         [UIUtil showHint:@"恭喜!\n进入下一关!" inView:self.viewController.view];
         [self randomMap];
     }
@@ -92,8 +102,20 @@
 - (RACCommand *)restartCommand{
     if (!_restartCommand) {
         _restartCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
-            self.step = self.startStep;
-            self.gameMap = self.gameMap;
+            if (![self canResetCurrentStage]) {
+                [UIUtil showHint:@"三次重置机会已经用尽,重新开始游戏吧!"];
+                return [RACSignal empty];
+            }
+            UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"重新开始" message:[NSString stringWithFormat:@"每个关卡只能重置三次,确认重置?(%zd/3)",self.resetTimes] preferredStyle:UIAlertControllerStyleAlert];
+            [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                ++self.resetTimes;
+                self.step = self.startStep;
+                self.gameMap = self.gameMap;
+            }]];
+            
+            [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+            [self.viewController presentViewController:alertController animated:YES completion:nil];
+            
             return [RACSignal empty];
         }];
     }
@@ -106,8 +128,9 @@
             UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"新游戏" message:@"确定要从第一关重新开始游戏么?" preferredStyle:UIAlertControllerStyleAlert];
             [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                 self.stage = 1;
-                [self randomMap];
+                self.resetTimes = 1;
                 self.startStep = self.step = 1;
+                [self randomMap];
             }]];
             
             [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
@@ -125,6 +148,14 @@
         [gameMap addObject:NSStringFromCGPoint(CGPointMake(arc4random_uniform(12), arc4random_uniform(10)))];
     }
     self.gameMap = gameMap;
+}
+
+- (BOOL)canResetCurrentStage{
+    if (self.resetTimes > 3) {
+        return NO;
+    }else{
+        return YES;
+    }
 }
 
 - (BOOL)detectFail{

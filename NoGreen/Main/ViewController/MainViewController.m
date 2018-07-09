@@ -53,4 +53,8 @@
     [self.tabBarController setViewControllers:@[noGreenNav]];
 }
 
+- (UIViewController *)childViewControllerForStatusBarStyle{
+    return self.childViewControllers.firstObject;
+}
+
 @end

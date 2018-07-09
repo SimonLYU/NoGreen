@@ -117,4 +117,9 @@
     [self.viewModel.selectCommand execute:pixelView];
 }
 
+#pragma mark - preferredStatusBarStyle
+- (UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
+}
+
 @end

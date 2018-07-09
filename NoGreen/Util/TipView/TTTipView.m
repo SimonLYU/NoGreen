@@ -87,6 +87,8 @@ static TTTipView *_currentTipView;
         view.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
         [self addSubview:view];
         self.backgroundView.layer.cornerRadius = 8;
+        
+        self.userInteractionEnabled = NO;
     }
     return self;
 }

@@ -43,11 +43,11 @@
     [super registerRacsignal];
     
     [RACObserve(self.viewModel, stage) subscribeNext:^(id x) {
-        self.scoreLabel.text = [NSString stringWithFormat:@"关卡 : %zd",[x integerValue]];
+        self.scoreLabel.text = [NSString stringWithFormat:@"当前关卡 : %zd",[x integerValue]];
     }];
     
     [RACObserve(self.viewModel, step) subscribeNext:^(id x) {
-        self.stepLabel.text = [NSString stringWithFormat:@"步数 : %zd",[x integerValue]];
+        self.stepLabel.text = [NSString stringWithFormat:@"剩余步数 : %zd",[x integerValue]];
     }];
     
     [RACObserve(self.viewModel, gameMap) subscribeNext:^(id x) {

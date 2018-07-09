@@ -33,6 +33,7 @@
     [super viewDidLoad];
     [self registerRacsignal];
     [self setupUI];
+    [self.viewModel randomMap];
 }
 
 - (void)registerRacsignal{

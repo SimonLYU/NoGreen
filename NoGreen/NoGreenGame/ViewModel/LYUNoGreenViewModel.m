@@ -75,7 +75,7 @@
     }
     if ([self detectWin]) {
         self.startStep = self.step;
-        [UIUtil showHint:@"成功!!!"];
+        [UIUtil showHint:@"恭喜!\n即将进入下一关!"];
         ++self.stage;
         [self randomMap];
     }

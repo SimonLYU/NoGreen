@@ -24,5 +24,6 @@
 @property (nonatomic, strong) RACCommand *restartCommand;
 
 - (void)selectPixelView:(LYUPixel *)pixel;
+- (void)randomMap;
 
 @end

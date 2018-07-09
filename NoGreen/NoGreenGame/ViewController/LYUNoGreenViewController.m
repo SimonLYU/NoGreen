@@ -21,6 +21,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *stepLabel;
 @property (weak, nonatomic) IBOutlet UIButton *restartButton;
 @property (weak, nonatomic) IBOutlet UIButton *theNewGameButton;
+@property (weak, nonatomic) IBOutlet UIView *bottomContainerView;
+@property (weak, nonatomic) IBOutlet UIView *topContainerView;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
 @property (weak, nonatomic) IBOutlet UIView *gameView;
 
@@ -40,11 +43,11 @@
     [super registerRacsignal];
     
     [RACObserve(self.viewModel, stage) subscribeNext:^(id x) {
-        self.scoreLabel.text = [NSString stringWithFormat:@"STAGE : %zd",[x integerValue]];
+        self.scoreLabel.text = [NSString stringWithFormat:@"关卡 : %zd",[x integerValue]];
     }];
     
     [RACObserve(self.viewModel, step) subscribeNext:^(id x) {
-        self.stepLabel.text = [NSString stringWithFormat:@"STEP : %zd",[x integerValue]];
+        self.stepLabel.text = [NSString stringWithFormat:@"步数 : %zd",[x integerValue]];
     }];
     
     [RACObserve(self.viewModel, gameMap) subscribeNext:^(id x) {
@@ -64,6 +67,16 @@
     [self.navigationController setNavigationBarHidden:YES];
     self.view.backgroundColor = [UIColor blackColor];
     [self setupGameView];
+    self.topContainerView.layer.cornerRadius = 4;
+    self.topContainerView.layer.masksToBounds = YES;
+    self.topContainerView.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.topContainerView.layer.borderWidth = 1;
+    
+    self.bottomContainerView.layer.cornerRadius = 4;
+    self.bottomContainerView.layer.masksToBounds = YES;
+    self.bottomContainerView.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.bottomContainerView.layer.borderWidth = 1;
+    
 }
 
 - (void)setupGameView{

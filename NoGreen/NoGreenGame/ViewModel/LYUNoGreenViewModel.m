@@ -82,7 +82,8 @@
         [self.viewController presentViewController:alertController animated:YES completion:nil];
     }
     if ([self detectWin]) {
-        self.startStep =  self.step = self.step + ++self.stage;
+//        self.startStep =  self.step = self.step + ++self.stage;//保留上一关剩余的步数(easy 模式)
+        self.startStep =  self.step = ++self.stage;//不保留上一关剩余的步数(hard 模式)
         [UIUtil showHint:@"恭喜!\n进入下一关!" inView:self.viewController.view];
         [self randomMap];
     }

@@ -99,7 +99,7 @@
             [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                 self.stage = 1;
                 [self randomMap];
-                self.step = 0;
+                self.startStep = self.step = 0;
             }]];
             
             [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];

@@ -83,7 +83,7 @@
     }
     if ([self detectWin]) {
         self.startStep =  self.step = self.step + ++self.stage;
-        [UIUtil showHint:@"恭喜!\n即将进入下一关!" inView:self.viewController.view];
+        [UIUtil showHint:@"恭喜!\n进入下一关!" inView:self.viewController.view];
         [self randomMap];
     }
 }

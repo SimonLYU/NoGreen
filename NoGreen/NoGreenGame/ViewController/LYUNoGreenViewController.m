@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UIView *bottomContainerView;
 @property (weak, nonatomic) IBOutlet UIView *topContainerView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *heightScoreLabel;
 
 @property (weak, nonatomic) IBOutlet UIView *gameView;
 
@@ -53,7 +54,10 @@
     [RACObserve(self.viewModel, gameMap) subscribeNext:^(id x) {
         [self resetGameView];
     }];
-
+    
+    [RACObserve(self.viewModel, heightScore) subscribeNext:^(id x) {
+        self.heightScoreLabel.text = [NSString stringWithFormat:@"历史最高:%zd",self.viewModel.heightScore];
+    }];
     
     [[self.theNewGameButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
         [self.viewModel.theNewGameCommand execute:nil];

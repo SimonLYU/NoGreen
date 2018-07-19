@@ -13,6 +13,7 @@
 
 @property (nonatomic, assign) NSInteger stage;
 @property (nonatomic, assign) NSInteger step;
+@property (nonatomic, assign) NSInteger heightScore;
 @property (nonatomic, assign) NSInteger startStep;
 @property (nonatomic, assign) NSInteger resetTimes;
 

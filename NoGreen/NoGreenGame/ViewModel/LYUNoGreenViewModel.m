@@ -10,6 +10,10 @@
 #import "LYUPixel.h"
 #import "LYUNoGreenHeader.h"
 
+static inline NSString * kHeightScoreKey() {
+    return @"heightScoreKey";
+}
+
 @interface LYUNoGreenViewModel()
 @end
 
@@ -17,6 +21,7 @@
 
 - (void)initialize{
     [super initialize];
+    self.heightScore = [[[NSUserDefaults standardUserDefaults] objectForKey:kHeightScoreKey()] integerValue];
     self.stage = 1;
     self.startStep = self.step = 1;
     self.resetTimes = 1;
@@ -185,5 +190,14 @@
         }
     }
     return YES;
+}
+
+- (void)setStep:(NSInteger)step{
+    _step = step;
+    if (step > self.heightScore) {
+        self.heightScore = step;
+        [[NSUserDefaults standardUserDefaults] setObject:@(self.heightScore) forKey:kHeightScoreKey()];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
 }
 @end

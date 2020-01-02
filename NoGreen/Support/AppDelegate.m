@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "MainViewModel.h"
 #import "MainViewController.h"
+#import <GoogleMobileAds/GoogleMobileAds.h>
 
 @interface AppDelegate ()
 
@@ -19,6 +20,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    //谷歌广告
+    [[GADMobileAds sharedInstance] startWithCompletionHandler:nil];
+    
+    //Main
     UIWindow * mainWindow = [[UIWindow alloc] init];
     MainViewModel * mainViewModel = [[MainViewModel alloc] initWithVCName:NSStringFromClass([MainViewController class]) withInitType:kLYUVCTypeCode];
     MainViewController * mainViewController = [mainViewModel loadedVC];

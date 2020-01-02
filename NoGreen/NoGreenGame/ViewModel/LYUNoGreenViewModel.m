@@ -25,6 +25,7 @@ static inline NSString * kHeightScoreKey() {
     self.stage = 1;
     self.startStep = self.step = 1;
     self.resetTimes = 1;
+    self.showLifeAd = NO;
 }
 
 - (RACCommand *)selectCommand{
@@ -92,6 +93,8 @@ static inline NSString * kHeightScoreKey() {
                 self.gameMap = self.gameMap;
             }]];
             [self.viewController presentViewController:alertController animated:YES completion:nil];
+        }else if(!self.showLifeAd){
+            self.showLifeAd = YES;
         }else{
             [UIUtil showHint:@"三次重置机会已经用尽,重新开始游戏吧!"];
         }
@@ -99,9 +102,21 @@ static inline NSString * kHeightScoreKey() {
         //        self.startStep =  self.step = self.step + ++self.stage;//保留上一关剩余的步数(easy 模式)
         self.startStep =  self.step = ++self.stage;//不保留上一关剩余的步数(hard 模式)
         self.resetTimes = 1;
+        self.showLifeAd = NO;//重置续命广告
         [UIUtil showHint:@"恭喜!\n进入下一关!" inView:self.viewController.view];
         [self randomMap];
     }
+}
+
+- (RACCommand *)addLifeCommand{
+    if (!_addLifeCommand) {
+        _addLifeCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+            self.step = self.startStep;
+            self.gameMap = self.gameMap;
+            return [RACSignal empty];
+        }];
+    }
+    return _addLifeCommand;
 }
 
 - (RACCommand *)restartCommand{
@@ -135,6 +150,7 @@ static inline NSString * kHeightScoreKey() {
                 self.stage = 1;
                 self.resetTimes = 1;
                 self.startStep = self.step = 1;
+                self.showLifeAd = NO;
                 [self randomMap];
             }]];
             

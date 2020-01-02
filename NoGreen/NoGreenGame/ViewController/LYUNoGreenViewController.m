@@ -9,11 +9,11 @@
 #import "LYUNoGreenHeader.h"
 #import "BaseHeaders.h"
 #import "LYUNoGreenViewController.h"
-#import "LYUNoGreenViewController.h"
 #import "LYUNoGreenViewModel.h"
 #import "LYUPixel.h"
+@import GoogleMobileAds;
 
-@interface LYUNoGreenViewController ()<LYUPixelDelegate>
+@interface LYUNoGreenViewController ()<LYUPixelDelegate , GADRewardedAdDelegate>
 
 @property (nonatomic, strong) LYUNoGreenViewModel *viewModel;
 
@@ -28,6 +28,8 @@
 
 @property (weak, nonatomic) IBOutlet UIView *gameView;
 
+//AD
+@property(nonatomic, strong) GADRewardedAd *rewardedAd;
 @end
 
 @implementation LYUNoGreenViewController
@@ -59,6 +61,12 @@
         self.heightScoreLabel.text = [NSString stringWithFormat:@"历史最高:%zd",self.viewModel.heightScore];
     }];
     
+    [RACObserve(self.viewModel, showLifeAd) subscribeNext:^(id x) {
+        if (self.viewModel.showLifeAd) {
+            [self _showADForLife];
+        }
+    }];
+    
     [[self.theNewGameButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
         [self.viewModel.theNewGameCommand execute:nil];
     }];
@@ -81,6 +89,16 @@
     self.bottomContainerView.layer.borderColor = [UIColor whiteColor].CGColor;
     self.bottomContainerView.layer.borderWidth = 1;
     
+    self.rewardedAd = [[GADRewardedAd alloc]
+    initWithAdUnitID:@"ca-app-pub-4024299068057356/2346597322"];
+    GADRequest *request = [GADRequest request];
+    [self.rewardedAd loadRequest:request completionHandler:^(GADRequestError * _Nullable error) {
+      if (error) {
+        // Handle ad failed to load case.
+      } else {
+        // Ad successfully loaded.
+      }
+    }];
 }
 
 - (void)setupGameView{
@@ -114,6 +132,59 @@
         LYUPixel * pixel = self.viewModel.pixels[(NSInteger)point.x][(NSInteger)point.y];
         [self.viewModel selectPixelView:pixel];
     }
+}
+
+- (void)_showADForLife{
+    if (!self.rewardedAd.isReady) {//如果没准备好,直接失败
+        [UIUtil showHint:@"三次重置机会已经用尽,重新开始游戏吧!"];
+        return;
+    }
+    UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"失败" message:[NSString stringWithFormat:@"观看精彩广告,可以获得一次重生的机会哦~"] preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"获得重生" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if (self.rewardedAd.isReady) {
+            [self.rewardedAd presentFromRootViewController:self delegate:self];
+        } else {
+            NSLog(@"Ad wasn't ready");
+        }
+    }]];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"放弃" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+    }]];
+    [self presentViewController:alertController animated:YES completion:nil];
+
+}
+
+#pragma mark - GADRewardedAdDelegate
+- (void)rewardedAd:(GADRewardedAd *)rewardedAd userDidEarnReward:(GADAdReward *)reward {
+    [self.viewModel.addLifeCommand execute:nil];
+}
+
+/// Tells the delegate that the rewarded ad was presented.
+- (void)rewardedAdDidPresent:(GADRewardedAd *)rewardedAd {
+  NSLog(@"rewardedAdDidPresent:");
+}
+
+/// Tells the delegate that the rewarded ad failed to present.
+- (void)rewardedAd:(GADRewardedAd *)rewardedAd didFailToPresentWithError:(NSError *)error {
+  NSLog(@"rewardedAd:didFailToPresentWithError");
+}
+
+- (void)rewardedAdDidDismiss:(GADRewardedAd *)rewardedAd {
+  self.rewardedAd = [self createAndLoadRewardedAd];
+}
+
+- (GADRewardedAd *)createAndLoadRewardedAd {
+  GADRewardedAd *rewardedAd = [[GADRewardedAd alloc]
+      initWithAdUnitID:@"ca-app-pub-4024299068057356/2346597322"];
+  GADRequest *request = [GADRequest request];
+  [rewardedAd loadRequest:request completionHandler:^(GADRequestError * _Nullable error) {
+    if (error) {
+      // Handle ad failed to load case.
+    } else {
+      // Ad successfully loaded.
+    }
+  }];
+  return rewardedAd;
 }
 
 #pragma mark - LYUPixelDelegate

@@ -11,6 +11,7 @@ target 'NoGreen' do
     pod 'ReactiveCocoa', :git => 'https://github.com/zhao0/ReactiveCocoa.git', :tag => '2.5.2'
     pod 'MJExtension'
     pod 'pop'
+    pod 'Google-Mobile-Ads-SDK'
 end
 
 post_install do |installer|

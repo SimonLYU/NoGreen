@@ -16,6 +16,7 @@
 @property (nonatomic, assign) NSInteger heightScore;
 @property (nonatomic, assign) NSInteger startStep;
 @property (nonatomic, assign) NSInteger resetTimes;
+@property (nonatomic, assign) BOOL showLifeAd;
 
 @property (nonatomic, strong) NSArray *gameMap;
 
@@ -24,6 +25,7 @@
 @property (nonatomic, strong) RACCommand *selectCommand;
 @property (nonatomic, strong) RACCommand *theNewGameCommand;
 @property (nonatomic, strong) RACCommand *restartCommand;
+@property (nonatomic, strong) RACCommand *addLifeCommand;
 
 - (void)selectPixelView:(LYUPixel *)pixel;
 - (void)randomMap;

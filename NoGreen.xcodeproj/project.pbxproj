@@ -42,7 +42,7 @@
 /* Begin PBXFileReference section */
 		18128F99CFF5F150EFE88511 /* Pods_NoGreen.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NoGreen.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3D4D603260BC86A6AD2D087 /* Pods-NoGreen.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NoGreen.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NoGreen/Pods-NoGreen.debug.xcconfig"; sourceTree = "<group>"; };
-		F4525DF620EF0D9800336EBD /* NoGreen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NoGreen.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F4525DF620EF0D9800336EBD /* 除草季节.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "除草季节.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4525DF920EF0D9800336EBD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F4525DFA20EF0D9800336EBD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		F4525E0220EF0D9800336EBD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -144,7 +144,7 @@
 		F4525DF720EF0D9800336EBD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F4525DF620EF0D9800336EBD /* NoGreen.app */,
+				F4525DF620EF0D9800336EBD /* 除草季节.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -359,7 +359,7 @@
 			);
 			name = NoGreen;
 			productName = NoGreen;
-			productReference = F4525DF620EF0D9800336EBD /* NoGreen.app */;
+			productReference = F4525DF620EF0D9800336EBD /* 除草季节.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -625,7 +625,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyu.NoGreen;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "除草季节";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -644,7 +644,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyu.NoGreen;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "除草季节";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

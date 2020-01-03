@@ -7,6 +7,12 @@
 //
 
 #import "LYUPixel.h"
+@import Masonry;
+@interface LYUPixel ()
+
+@property (nonatomic, strong) UIImageView *backgroundImageView;
+
+@end
 
 @implementation LYUPixel
 
@@ -25,6 +31,12 @@
         
         self.layer.borderColor = [UIColor whiteColor].CGColor;
         self.layer.borderWidth = 1;
+        
+        self.backgroundImageView = [[UIImageView alloc] init];
+        [self addSubview:self.backgroundImageView];
+        [self.backgroundImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.mas_equalTo(UIEdgeInsetsZero);
+        }];
     }
     return self;
 }
@@ -34,13 +46,15 @@
     switch (type) {
         case kLYUPixelTypeSelected:
         {
-            self.backgroundColor = [UIColor greenColor];
+//            self.backgroundColor = [UIColor greenColor];
+            self.backgroundImageView.image = [UIImage imageNamed:@"草1"];
         }
             break;
         case kLYUPixelTypeNormal:
         default:
         {
-            self.backgroundColor = [UIColor clearColor];
+//            self.backgroundColor = [UIColor clearColor];
+            self.backgroundImageView.image = nil;
         }
             break;
     }

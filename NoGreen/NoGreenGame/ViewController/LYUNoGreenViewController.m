@@ -11,9 +11,11 @@
 #import "LYUNoGreenViewController.h"
 #import "LYUNoGreenViewModel.h"
 #import "LYUPixel.h"
+#import "UIColor+Extension.h"
+@import Masonry;
 @import GoogleMobileAds;
 
-@interface LYUNoGreenViewController ()<LYUPixelDelegate , GADRewardedAdDelegate>
+@interface LYUNoGreenViewController ()<LYUPixelDelegate , GADRewardedAdDelegate ,GADBannerViewDelegate>
 
 @property (nonatomic, strong) LYUNoGreenViewModel *viewModel;
 
@@ -25,11 +27,14 @@
 @property (weak, nonatomic) IBOutlet UIView *topContainerView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *heightScoreLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *titleBackgroundImageview;
 
 @property (weak, nonatomic) IBOutlet UIView *gameView;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewBottomCons;
 //AD
 @property(nonatomic, strong) GADRewardedAd *rewardedAd;
+@property(nonatomic, strong) GADBannerView *bannerView;
 @end
 
 @implementation LYUNoGreenViewController
@@ -75,20 +80,46 @@
         [self.viewModel.restartCommand execute:nil];
     }];
 }
+
 - (void)setupUI{
     [self.navigationController setNavigationBarHidden:YES];
     self.view.backgroundColor = [UIColor blackColor];
     [self setupGameView];
+    
     self.topContainerView.layer.cornerRadius = 4;
     self.topContainerView.layer.masksToBounds = YES;
-    self.topContainerView.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.topContainerView.layer.borderColor = [UIColor ARGB:0x637FF7].CGColor;
     self.topContainerView.layer.borderWidth = 1;
     
     self.bottomContainerView.layer.cornerRadius = 4;
     self.bottomContainerView.layer.masksToBounds = YES;
-    self.bottomContainerView.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.bottomContainerView.layer.borderColor = [UIColor clearColor].CGColor;
     self.bottomContainerView.layer.borderWidth = 1;
     
+    self.theNewGameButton.layer.cornerRadius = 4.f;
+    self.theNewGameButton.layer.masksToBounds = YES;
+    self.restartButton.layer.cornerRadius = 4.f;
+    self.restartButton.layer.masksToBounds = YES;
+    
+    self.titleBackgroundImageview.layer.cornerRadius = 4.f;
+    self.titleBackgroundImageview.layer.masksToBounds = YES;
+    
+    //AD-banner
+    self.bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner];
+    self.bannerView.adUnitID = @"ca-app-pub-4024299068057356/8034038272";
+    self.bannerView.rootViewController = self;
+    self.bannerView.delegate = self;
+    [self.bannerView loadRequest:[GADRequest request]];
+    [self.view addSubview:self.bannerView];
+    [self.bannerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.mas_equalTo(self.view);
+        make.centerX.mas_equalTo(self.view);
+        make.width.mas_equalTo(kGADAdSizeBanner.size.width);
+        make.height.mas_equalTo(kGADAdSizeBanner.size.height);
+    }];
+    self.bottomViewBottomCons.constant = -kGADAdSizeBanner.size.height;
+    
+    //AD-full screen
     self.rewardedAd = [[GADRewardedAd alloc]
     initWithAdUnitID:@"ca-app-pub-4024299068057356/2346597322"];
     GADRequest *request = [GADRequest request];
@@ -154,6 +185,39 @@
 
 }
 
+#pragma mark - GADBannerViewDelegate;
+/// Tells the delegate an ad request loaded an ad.
+- (void)adViewDidReceiveAd:(GADBannerView *)adView {
+  NSLog(@"adViewDidReceiveAd");
+}
+
+/// Tells the delegate an ad request failed.
+- (void)adView:(GADBannerView *)adView
+    didFailToReceiveAdWithError:(GADRequestError *)error {
+  NSLog(@"adView:didFailToReceiveAdWithError: %@", [error localizedDescription]);
+}
+
+/// Tells the delegate that a full-screen view will be presented in response
+/// to the user clicking on an ad.
+- (void)adViewWillPresentScreen:(GADBannerView *)adView {
+  NSLog(@"adViewWillPresentScreen");
+}
+
+/// Tells the delegate that the full-screen view will be dismissed.
+- (void)adViewWillDismissScreen:(GADBannerView *)adView {
+  NSLog(@"adViewWillDismissScreen");
+}
+
+/// Tells the delegate that the full-screen view has been dismissed.
+- (void)adViewDidDismissScreen:(GADBannerView *)adView {
+  NSLog(@"adViewDidDismissScreen");
+}
+
+/// Tells the delegate that a user click will open another app (such as
+/// the App Store), backgrounding the current app.
+- (void)adViewWillLeaveApplication:(GADBannerView *)adView {
+  NSLog(@"adViewWillLeaveApplication");
+}
 #pragma mark - GADRewardedAdDelegate
 - (void)rewardedAd:(GADRewardedAd *)rewardedAd userDidEarnReward:(GADAdReward *)reward {
     [self.viewModel.addLifeCommand execute:nil];
@@ -194,7 +258,7 @@
 
 #pragma mark - preferredStatusBarStyle
 - (UIStatusBarStyle)preferredStatusBarStyle{
-    return UIStatusBarStyleLightContent;
+    return UIStatusBarStyleDefault;
 }
 
 @end

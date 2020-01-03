@@ -123,7 +123,11 @@ static inline NSString * kHeightScoreKey() {
     if (!_restartCommand) {
         _restartCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             if (![self canResetCurrentStage]) {
-                [UIUtil showHint:@"三次重置机会已经用尽,重新开始游戏吧!"];
+                if(!self.showLifeAd){//加命
+                    self.showLifeAd = YES;
+                }else{//提示
+                    [UIUtil showHint:@"三次重置机会已经用尽,重新开始游戏吧!"];
+                }
                 return [RACSignal empty];
             }
             UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"重新开始" message:[NSString stringWithFormat:@"每个关卡只能重置三次,确认重置?(%zd/3)",self.resetTimes] preferredStyle:UIAlertControllerStyleAlert];

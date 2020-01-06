@@ -114,21 +114,20 @@
     [self.bannerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.mas_equalTo(self.view);
         make.centerX.mas_equalTo(self.view);
-        make.width.mas_equalTo(kGADAdSizeBanner.size.width);
+        make.width.mas_equalTo(UIScreen.mainScreen.bounds.size.width);
         make.height.mas_equalTo(kGADAdSizeBanner.size.height);
     }];
-    self.bottomViewBottomCons.constant = -kGADAdSizeBanner.size.height;
+    self.bottomViewBottomCons.constant = -(kGADAdSizeBanner.size.height + 5);
     
     //AD-full screen
-    self.rewardedAd = [[GADRewardedAd alloc]
-    initWithAdUnitID:@"ca-app-pub-4024299068057356/2346597322"];
+    self.rewardedAd = [[GADRewardedAd alloc] initWithAdUnitID:@"ca-app-pub-4024299068057356/2346597322"];
     GADRequest *request = [GADRequest request];
     [self.rewardedAd loadRequest:request completionHandler:^(GADRequestError * _Nullable error) {
-      if (error) {
-        // Handle ad failed to load case.
-      } else {
-        // Ad successfully loaded.
-      }
+        if (error) {
+            // Handle ad failed to load case.
+        } else {
+            // Ad successfully loaded.
+        }
     }];
 }
 
@@ -182,41 +181,41 @@
         
     }]];
     [self presentViewController:alertController animated:YES completion:nil];
-
+    
 }
 
 #pragma mark - GADBannerViewDelegate;
 /// Tells the delegate an ad request loaded an ad.
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
-  NSLog(@"adViewDidReceiveAd");
+    NSLog(@"adViewDidReceiveAd");
 }
 
 /// Tells the delegate an ad request failed.
 - (void)adView:(GADBannerView *)adView
-    didFailToReceiveAdWithError:(GADRequestError *)error {
-  NSLog(@"adView:didFailToReceiveAdWithError: %@", [error localizedDescription]);
+didFailToReceiveAdWithError:(GADRequestError *)error {
+    NSLog(@"adView:didFailToReceiveAdWithError: %@", [error localizedDescription]);
 }
 
 /// Tells the delegate that a full-screen view will be presented in response
 /// to the user clicking on an ad.
 - (void)adViewWillPresentScreen:(GADBannerView *)adView {
-  NSLog(@"adViewWillPresentScreen");
+    NSLog(@"adViewWillPresentScreen");
 }
 
 /// Tells the delegate that the full-screen view will be dismissed.
 - (void)adViewWillDismissScreen:(GADBannerView *)adView {
-  NSLog(@"adViewWillDismissScreen");
+    NSLog(@"adViewWillDismissScreen");
 }
 
 /// Tells the delegate that the full-screen view has been dismissed.
 - (void)adViewDidDismissScreen:(GADBannerView *)adView {
-  NSLog(@"adViewDidDismissScreen");
+    NSLog(@"adViewDidDismissScreen");
 }
 
 /// Tells the delegate that a user click will open another app (such as
 /// the App Store), backgrounding the current app.
 - (void)adViewWillLeaveApplication:(GADBannerView *)adView {
-  NSLog(@"adViewWillLeaveApplication");
+    NSLog(@"adViewWillLeaveApplication");
 }
 #pragma mark - GADRewardedAdDelegate
 - (void)rewardedAd:(GADRewardedAd *)rewardedAd userDidEarnReward:(GADAdReward *)reward {
@@ -225,30 +224,30 @@
 
 /// Tells the delegate that the rewarded ad was presented.
 - (void)rewardedAdDidPresent:(GADRewardedAd *)rewardedAd {
-  NSLog(@"rewardedAdDidPresent:");
+    NSLog(@"rewardedAdDidPresent:");
 }
 
 /// Tells the delegate that the rewarded ad failed to present.
 - (void)rewardedAd:(GADRewardedAd *)rewardedAd didFailToPresentWithError:(NSError *)error {
-  NSLog(@"rewardedAd:didFailToPresentWithError");
+    NSLog(@"rewardedAd:didFailToPresentWithError");
 }
 
 - (void)rewardedAdDidDismiss:(GADRewardedAd *)rewardedAd {
-  self.rewardedAd = [self createAndLoadRewardedAd];
+    self.rewardedAd = [self createAndLoadRewardedAd];
 }
 
 - (GADRewardedAd *)createAndLoadRewardedAd {
-  GADRewardedAd *rewardedAd = [[GADRewardedAd alloc]
-      initWithAdUnitID:@"ca-app-pub-4024299068057356/2346597322"];
-  GADRequest *request = [GADRequest request];
-  [rewardedAd loadRequest:request completionHandler:^(GADRequestError * _Nullable error) {
-    if (error) {
-      // Handle ad failed to load case.
-    } else {
-      // Ad successfully loaded.
-    }
-  }];
-  return rewardedAd;
+    GADRewardedAd *rewardedAd = [[GADRewardedAd alloc]
+                                 initWithAdUnitID:@"ca-app-pub-4024299068057356/2346597322"];
+    GADRequest *request = [GADRequest request];
+    [rewardedAd loadRequest:request completionHandler:^(GADRequestError * _Nullable error) {
+        if (error) {
+            // Handle ad failed to load case.
+        } else {
+            // Ad successfully loaded.
+        }
+    }];
+    return rewardedAd;
 }
 
 #pragma mark - LYUPixelDelegate

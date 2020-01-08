@@ -15,6 +15,18 @@
 @import Masonry;
 @import GoogleMobileAds;
 
+static inline BOOL showAD(){
+    //show AD
+    BOOL showAD = NO;
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    NSDate *showDate = [formatter dateFromString:@"2020-02-26 00:00:00"];
+    NSTimeInterval showTime = [showDate timeIntervalSince1970];
+    NSTimeInterval nowTime = [[NSDate date] timeIntervalSince1970];
+    showAD = nowTime > showTime;
+    return showAD;
+}
+
 @interface LYUNoGreenViewController ()<LYUPixelDelegate , GADRewardedAdDelegate ,GADBannerViewDelegate>
 
 @property (nonatomic, strong) LYUNoGreenViewModel *viewModel;
@@ -104,31 +116,37 @@
     self.titleBackgroundImageview.layer.cornerRadius = 4.f;
     self.titleBackgroundImageview.layer.masksToBounds = YES;
     
-    //AD-banner
-    self.bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner];
-    self.bannerView.adUnitID = @"ca-app-pub-4024299068057356/8034038272";
-    self.bannerView.rootViewController = self;
-    self.bannerView.delegate = self;
-    [self.bannerView loadRequest:[GADRequest request]];
-    [self.view addSubview:self.bannerView];
-    [self.bannerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.bottomContainerView.mas_bottom).offset(5);
-        make.centerX.mas_equalTo(self.view);
-        make.width.mas_equalTo(UIScreen.mainScreen.bounds.size.width);
-        make.height.mas_equalTo(kGADAdSizeBanner.size.height);
-    }];
-    self.bottomViewBottomCons.constant = -(kGADAdSizeBanner.size.height + 5);
-    
-    //AD-full screen
-    self.rewardedAd = [[GADRewardedAd alloc] initWithAdUnitID:@"ca-app-pub-4024299068057356/2346597322"];
-    GADRequest *request = [GADRequest request];
-    [self.rewardedAd loadRequest:request completionHandler:^(GADRequestError * _Nullable error) {
-        if (error) {
-            // Handle ad failed to load case.
-        } else {
-            // Ad successfully loaded.
-        }
-    }];
+    if (showAD()) {
+        //AD-banner
+        self.bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner];
+        self.bannerView.adUnitID = @"ca-app-pub-4024299068057356/8034038272";
+        self.bannerView.rootViewController = self;
+        self.bannerView.delegate = self;
+        [self.bannerView loadRequest:[GADRequest request]];
+        [self.view addSubview:self.bannerView];
+        [self.bannerView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(self.bottomContainerView.mas_bottom).offset(5);
+            make.centerX.mas_equalTo(self.view);
+            make.width.mas_equalTo(UIScreen.mainScreen.bounds.size.width);
+            make.height.mas_equalTo(kGADAdSizeBanner.size.height);
+        }];
+        
+        //AD-full screen
+        self.rewardedAd = [[GADRewardedAd alloc] initWithAdUnitID:@"ca-app-pub-4024299068057356/2346597322"];
+        GADRequest *request = [GADRequest request];
+        [self.rewardedAd loadRequest:request completionHandler:^(GADRequestError * _Nullable error) {
+            if (error) {
+                // Handle ad failed to load case.
+            } else {
+                // Ad successfully loaded.
+            }
+        }];
+        
+        self.bottomViewBottomCons.constant = -(kGADAdSizeBanner.size.height + 5);
+    }else{
+        self.bottomViewBottomCons.constant = -5;
+    }
+
 }
 
 - (void)setupGameView{
@@ -165,6 +183,10 @@
 }
 
 - (void)_showADForLife{
+    if (!self.rewardedAd || !showAD()) {
+        [UIUtil showHint:@"三次重置机会已经用尽,重新开始游戏吧!"];
+        return;
+    }
     if (!self.rewardedAd.isReady) {//如果没准备好,直接失败
         [UIUtil showHint:@"三次重置机会已经用尽,重新开始游戏吧!"];
         return;

@@ -112,7 +112,7 @@
     [self.bannerView loadRequest:[GADRequest request]];
     [self.view addSubview:self.bannerView];
     [self.bannerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.view);
+        make.top.mas_equalTo(self.bottomContainerView.mas_bottom).offset(5);
         make.centerX.mas_equalTo(self.view);
         make.width.mas_equalTo(UIScreen.mainScreen.bounds.size.width);
         make.height.mas_equalTo(kGADAdSizeBanner.size.height);
@@ -191,8 +191,7 @@
 }
 
 /// Tells the delegate an ad request failed.
-- (void)adView:(GADBannerView *)adView
-didFailToReceiveAdWithError:(GADRequestError *)error {
+- (void)adView:(GADBannerView *)adView didFailToReceiveAdWithError:(GADRequestError *)error {
     NSLog(@"adView:didFailToReceiveAdWithError: %@", [error localizedDescription]);
 }
 

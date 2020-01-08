@@ -617,6 +617,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = H72ELBS265;
 				INFOPLIST_FILE = "$(SRCROOT)/NoGreen/Support/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -624,7 +625,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.lyu.NoGreen;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lyu.chuCaoJiJie;
 				PRODUCT_NAME = "除草季节";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -636,6 +638,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = H72ELBS265;
 				INFOPLIST_FILE = "$(SRCROOT)/NoGreen/Support/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -643,7 +646,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.lyu.NoGreen;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lyu.chuCaoJiJie;
 				PRODUCT_NAME = "除草季节";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
